@@ -6,7 +6,7 @@ crop.factory('cropAreaCircle', ['cropArea', function(CropArea) {
 
     this._boxResizeBaseSize = 20;
     this._boxResizeNormalRatio = 0.9;
-    this._boxResizeHoverRatio = 1.2;
+    this._boxResizeHoverRatio = 1.3;
     this._iconMoveNormalRatio = 0.9;
     this._iconMoveHoverRatio = 1.2;
 

@@ -7,12 +7,14 @@ crop.factory('cropArea', ['cropCanvas', function(CropCanvas) {
 
     this._minSize=80;
 
-    this._cropCanvas=new CropCanvas(ctx);
+    this._cropCanvas=new CropCanvas(ctx,this);
 
     this._image=new Image();
     this._x = 0;
     this._y = 0;
+    this._currentCenter = [this._x,this._y];
     this._size = 200;
+    this._rotation = 0;
   };
 
   /* GETTERS/SETTERS */
@@ -23,6 +25,14 @@ crop.factory('cropArea', ['cropCanvas', function(CropCanvas) {
   CropArea.prototype.setImage = function (image) {
     this._image = image;
   };
+  CropArea.prototype.getRotation = function(){
+    return this._rotation;
+  }
+  CropArea.prototype.setRotation = function(rotation){
+    this._currentCenter = [this._x,this._y];
+    this._events.trigger('area-rotate-end');
+    return this._rotation = rotation;
+  }
 
   CropArea.prototype.getX = function () {
     return this._x;

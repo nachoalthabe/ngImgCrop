@@ -71,7 +71,7 @@ crop.directive('imgCrop', ['$timeout', 'cropHost', 'cropPubSub', function($timeo
             updateResultImage(scope);
           }
         }))
-        .on('area-move-end area-resize-end image-updated', fnSafeApply(function(scope){
+        .on('area-rotate-end area-move-end area-resize-end image-updated', fnSafeApply(function(scope){
           updateResultImage(scope);
         }));
 

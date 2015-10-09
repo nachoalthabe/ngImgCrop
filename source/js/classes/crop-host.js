@@ -54,8 +54,20 @@ crop.factory('cropHost', ['$document', 'cropAreaFace', 'cropAreaCircle', 'cropAr
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
       if (image !== null) {
-        // draw source image
+
+
+        if (theArea.getRotation) {
+          ctx.save();
+          ctx.translate(theArea._currentCenter[0], theArea._currentCenter[1]);
+          ctx.rotate(theArea.getRotation() * Math.PI / 180);
+          ctx.translate(-theArea._currentCenter[0], -theArea._currentCenter[1]);
+        }
+
         ctx.drawImage(image, 0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        if (theArea.getRotation) {
+          ctx.restore();
+        };
 
         ctx.save();
 
@@ -179,7 +191,16 @@ crop.factory('cropHost', ['$document', 'cropAreaFace', 'cropAreaCircle', 'cropAr
       temp_canvas.width = resImgSize;
       temp_canvas.height = resImgSize;
       if (image !== null) {
+        if (theArea.getRotation) {
+          temp_ctx.save();
+          temp_ctx.translate(resImgSize/2, resImgSize/2);
+          temp_ctx.rotate(theArea.getRotation() * Math.PI / 180);
+          temp_ctx.translate(-resImgSize/2, -resImgSize/2);
+        }
         temp_ctx.drawImage(image, (theArea.getX() - theArea.getSize() / 2) * (image.width / ctx.canvas.width), (theArea.getY() - theArea.getSize() / 2) * (image.height / ctx.canvas.height), theArea.getSize() * (image.width / ctx.canvas.width), theArea.getSize() * (image.height / ctx.canvas.height), 0, 0, resImgSize, resImgSize);
+        if (theArea.getRotation) {
+          temp_ctx.restore();
+        };
       }
       if (resImgQuality !== null) {
         return temp_canvas.toDataURL(resImgFormat, resImgQuality);
