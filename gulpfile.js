@@ -186,7 +186,7 @@ gulp.task('sass', function() {
 gulp.task('dev', ['injectTest','sass'], function(){
   browserSync.init({
        server: "./",
-       index: "test/index.htm"
+       startPath: "test/"
    });
 
    gulp.watch("source/scss/*.scss", ['sass']);

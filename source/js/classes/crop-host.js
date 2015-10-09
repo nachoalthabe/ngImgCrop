@@ -1,6 +1,6 @@
 'use strict';
 
-crop.factory('cropHost', ['$document', 'cropAreaCircle', 'cropAreaSquare', 'cropEXIF', function($document, CropAreaCircle, CropAreaSquare, cropEXIF) {
+crop.factory('cropHost', ['$document', 'cropAreaFace', 'cropAreaCircle', 'cropAreaSquare', 'cropEXIF', function($document, CropAreaCircle, CropAreaSquare, cropEXIF) {
   /* STATIC FUNCTIONS */
 
   // Get Element's Offset
