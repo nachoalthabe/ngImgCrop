@@ -31,6 +31,18 @@
 </head>
 
 <body ng-controller="Ctrl">
+  <div ng-if="enableCrop" class="cropArea" ng-class="{'big':size=='big', 'medium':size=='medium', 'small':size=='small'}">
+    <img-crop image="imageDataURI" result-image="$parent.resImageDataURI" change-on-fly="changeOnFly" area-type="{{type}}" area-min-size="selMinSize" result-image-format="{{resImgFormat}}" result-image-quality="resImgQuality" result-image-size="resImgSize"
+    on-change="onChange($dataURI)" on-load-begin="onLoadBegin()" on-load-done="onLoadDone()" on-load-error="onLoadError()"></img-crop>
+    <!--aspect-ratio="aspectRatio"-->
+  </div>
+
+  <div style="text-align:center">
+    <h3>Result</h3>
+    <div>
+      <img ng-src="{{resImageDataURI}}" />
+    </div>
+  </div>
   <div>
     <label>
       <input type="checkbox" ng-model="enableCrop" ng-init="enableCrop=true" /> Add ngImgCrop to Page</label>
@@ -46,6 +58,8 @@
   </div>
   <div>
     Area type:
+    <label>
+      <input type="radio" ng-model="type" value="face" /> Face</label>
     <label>
       <input type="radio" ng-model="type" value="circle" /> Circle</label>
     <label>
@@ -101,19 +115,6 @@
     <button ng-click="imageDataURI=''">Reset Image</button>
   </div>
 
-  <div ng-if="enableCrop" class="cropArea" ng-class="{'big':size=='big', 'medium':size=='medium', 'small':size=='small'}">
-    <img-crop image="imageDataURI" result-image="$parent.resImageDataURI" change-on-fly="changeOnFly" area-type="{{type}}" area-min-size="selMinSize" result-image-format="{{resImgFormat}}" result-image-quality="resImgQuality" result-image-size="resImgSize"
-    on-change="onChange($dataURI)" on-load-begin="onLoadBegin()" on-load-done="onLoadDone()" on-load-error="onLoadError()"></img-crop>
-    <!--aspect-ratio="aspectRatio"-->
-  </div>
-
-  <div style="text-align:center">
-    <h3>Result</h3>
-    <div>
-      <img ng-src="{{resImageDataURI}}" />
-    </div>
-  </div>
-
   <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
   <!-- inject:js -->
   <script src="/source/js/init.js"></script>
@@ -130,9 +131,9 @@
   <script type="text/javascript">
     angular.module('app', ['ngImgCrop'])
       .controller('Ctrl', function($scope) {
-        $scope.size = 'small';
-        $scope.type = 'circle';
-        $scope.imageDataURI = '';
+        $scope.size = 'medium';
+        $scope.type = 'face';
+        $scope.imageDataURI = 'test.jpg';
         $scope.resImageDataURI = '';
         $scope.resImgFormat = 'image/png';
         $scope.resImgQuality = 1;
