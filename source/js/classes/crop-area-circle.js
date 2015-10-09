@@ -149,4 +149,3 @@ crop.factory('cropAreaCircle', ['cropArea', function(CropArea) {
 
   return CropAreaCircle;
 }]);
-

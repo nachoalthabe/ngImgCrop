@@ -4,7 +4,7 @@ var argv         = require('minimist')(process.argv.slice(2)),
     header       = require('gulp-header'),
     gutil        = require('gulp-util'),
     ngAnnotate   = require('gulp-ng-annotate'),
-    compass      = require('gulp-compass'),
+    sass         = require('gulp-sass'),
     refresh      = require('gulp-livereload'),
     prefix       = require('gulp-autoprefixer'),
     minifyCss    = require('gulp-minify-css'),
@@ -18,6 +18,8 @@ var argv         = require('minimist')(process.argv.slice(2)),
     jshint       = require('gulp-jshint'),
     jshintStylish= require('jshint-stylish'),
     pkg          = require('./package.json'),
+    inject       = require('gulp-inject'),
+    browserSync  = require('browser-sync').create(),
     lr,
     refresh_lr;
 
@@ -67,11 +69,7 @@ var Config = {
 // Compile Styles
 gulp.task('styles', function(){
   return gulp.src(Config.paths.source.scss + '/'+pkg.name+'.scss')
-    .pipe(compass({
-      sass: Config.paths.source.scss,
-      css: Config.paths.compileUnminified.css,
-      errLogToConsole: true
-    }))
+    .pipe(sass().on('error', sass.logError))
     .pipe(prefix('last 2 version', '> 5%', 'safari 5', 'ie 8', 'ie 7', 'opera 12.1', 'ios 6', 'android 4'))
     .pipe(gulp.dest(Config.paths.compileUnminified.css));
 });
@@ -168,6 +166,33 @@ gulp.task('lint', function() {
 
 // Build
 gulp.task('build', ['dist:js', 'dist:css']);
+
+gulp.task('injectTest', function () {
+  var target = gulp.src('./test/index.html');
+  // It's not necessary to read the files (will speed up things), we're only after their paths:
+  var sources = gulp.src(['./source/js/**/*.js', './test/*.css'], {read: false}, {relative: true});
+
+  return target.pipe(inject(sources))
+    .pipe(gulp.dest('./test'));
+});
+
+gulp.task('sass', function() {
+    return gulp.src("source/scss/*.scss")
+        .pipe(sass())
+        .pipe(gulp.dest("test"))
+        .pipe(browserSync.stream());;
+});
+
+gulp.task('dev', ['injectTest','sass'], function(){
+  browserSync.init({
+       server: "./",
+       index: "test/index.htm"
+   });
+
+   gulp.watch("source/scss/*.scss", ['sass']);
+   gulp.watch("source/js/**/*.js").on('change', browserSync.reload);
+    gulp.watch("test/*.html").on('change', browserSync.reload);
+});
 
 // Start server and watch for changes
 gulp.task('default', ['server', 'livereload', 'styles', 'scripts', 'watch'], function(){
